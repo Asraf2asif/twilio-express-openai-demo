@@ -9,6 +9,7 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.20.3",
+    "colors": "^1.4.0",
     "express": "^4.21.0",
     "openai": "^4.66.1",
     "twilio": "^5.3.2"

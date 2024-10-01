@@ -3,13 +3,16 @@ const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const urlencoded = require('body-parser').urlencoded;
 const OpenAI = require('openai');
 const app = express();
+require('colors');
 
 app.use(urlencoded({extended: false}));
 
 app.post('/incoming', (request, response) => {
 
   const voiceResponse = new VoiceResponse();
-  voiceResponse.say('Hello, how are you?');
+  const greeting = 'Hello, how are you?';
+  voiceResponse.say(greeting);
+  console.log(`Voice Agent -> ${greeting}` . green);
 
   // setting up event here, for how to handle future incoming audio for this call
   voiceResponse.gather({
@@ -27,11 +30,13 @@ app.post('/incoming', (request, response) => {
 app.post('/respond', async (request, response) => {
 
   const voiceInput = request.body.SpeechResult;
+  console.log('User -> ' + voiceInput);
 
   const openai = new OpenAI();
   const chatCompletion = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     messages: [
+      {role: "system", content: "Keep responses no longer than 20 words."},
       {role: "user", content: voiceInput}
     ],
     temperature: 0,
@@ -40,6 +45,7 @@ app.post('/respond', async (request, response) => {
 
   const voiceResponse = new VoiceResponse();
   voiceResponse.say(assistantResponse);
+  console.log(`Voice Agent -> ${assistantResponse}` . green);
   voiceResponse.redirect({method: 'POST'}, '/listen');
 
   response.type('application/xml');
