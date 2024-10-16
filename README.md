@@ -1,5 +1,7 @@
 # Twilio Express OpenAI Demo
 
+https://levelup.gitconnected.com/ai-voice-agent-with-twilio-express-and-openai-96e19c1e8035
+
 
 ## Getting started
 
